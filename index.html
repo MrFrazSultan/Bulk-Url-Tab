@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-window Opener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: calc(100% - 100px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="urlInput">Website URL:</label>
+    <input type="text" id="urlInput" placeholder="Enter URL">
+    <label for="numberInput">Number of Windows:</label>
+    <input type="number" id="numberInput" placeholder="Enter number">
+    <button onclick="openWindows()">Open</button>
+  </div>
+  
+  <script>
+    function openWindows() {
+      var url = document.getElementById('urlInput').value;
+      var numberOfWindows = parseInt(document.getElementById('numberInput').value);
+
+      // Validate URL
+      if (url === '') {
+        alert('Please enter a URL');
+        return;
+      }
+
+      // Create multiple iframes
+      for (var i = 0; i < numberOfWindows; i++) {
+        var iframe = document.createElement('iframe');
+        iframe.src = generateEmbedUrl(url);
+        iframe.width = '800';
+        iframe.height = '450';
+        iframe.frameborder = '0';
+        document.body.appendChild(iframe);
+      }
+    }
+
+    function generateEmbedUrl(url) {
+      // Check if it's a YouTube video
+      if (url.includes('youtube.com/watch')) {
+        // Extract video ID
+        var videoId = url.split('v=')[1];
+        var ampersandPosition = videoId.indexOf('&');
+        if (ampersandPosition !== -1) {
+          videoId = videoId.substring(0, ampersandPosition);
+        }
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=1&iv_load_policy=3&controls=0&disablekb=1&fs=0`;
+      }
+      return url;
+    }
+  </script>
+</body>
+</html>
